@@ -124,13 +124,20 @@ def register():
 
 @app.route("/news")
 def news():
+    edit = ''
+    if 'login' in session:
+        user = session['login']
+        if data.is_access(user, 0):
+            edit = """
+                <a href="edit">Добавить новость</a>
+            """
     menu = """
             <div class="menu_box">
                 <a href="index"><div class="Menu">Главная</div></a>
                 <a href="news"><div class="Menu-opened">Новости</div></a>
             </div>
             """
-    content = ''
+    content = edit
     right_sidebar = login_form() 
     return html_all(menu, content, right_sidebar)
 
