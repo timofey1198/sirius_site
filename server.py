@@ -129,7 +129,11 @@ def news():
         user = session['login']
         if data.is_access(user, 0):
             edit = """
-                <a href="edit">Добавить новость</a>
+                <div class="header_block">
+                <center><a href="edit">
+                    <div class="add_new">Добавить новость</div>
+                </a><center>
+                </div>
             """
     menu = """
             <div class="menu_box">
