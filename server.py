@@ -70,6 +70,19 @@ def login_form():
             """
     return login_form
 
+def page_not_found_error():
+    html = """
+        <html>
+            <body>
+                <center>
+                    <h1>Страница не найдена...</h1><br>
+                    <a href="index">На главную</a>
+                </center>
+            </body>
+        </html>
+        """
+    return html
+
 #------------------------------------PAGES--------------------------------------
 
 @app.route("/")
@@ -78,21 +91,9 @@ def index():
     menu = """
             <div class="menu_box">
                 <a href="index"><div class="Menu-opened">Главная</div></a>
-                <a href="about"><div class="Menu">Обо мне</div></a>
-                <a href="science"><div class="Menu">Наука</div></a>
-                <a href="contacts"><div class="Menu">Контакты</div></a>
-                <a href="profile"><div class="Menu">Профиль</div></a>
+                <a href="news"><div class="Menu">Новости</div></a>
             </div>"""
-    content = """
-        <div class="content">
-            <div class="news">
-                <h3>Это я</h3><br>
-                <img src="img/me_1" height="200px">
-            </div>
-            <div class="news">
-                <h3>Новость2</h3><br>
-            </div>
-        </div>"""
+    content = ''
     right_sidebar = login_form()
     return html_all(menu, content, right_sidebar)
 
@@ -121,70 +122,27 @@ def register():
             """
     return html_all(menu, content, '')
 
-@app.route("/about")
-def about():
+@app.route("/news")
+def news():
     menu = """
             <div class="menu_box">
                 <a href="index"><div class="Menu">Главная</div></a>
-                <a href="about"><div class="Menu-opened">Обо мне</div></a>
-                <a href="science"><div class="Menu">Наука</div></a>
-                <a href="contacts"><div class="Menu">Контакты</div></a>
+                <a href="news"><div class="Menu-opened">Новости</div></a>
             </div>
             """
-    about_1 = open('pages/about_1.txt', 'r')
-    about_2 = open('pages/about_2.txt', 'r')
-    content = ("""
-        <div class="content">
-            <div class="news">
-                <h1>Обо мне</h1><br>"""
-                + about_1.read() +
-            """</div>
-            <div class="news">"""
-                + about_2.read() +
-            """</div>
-        </div>""")
+    content = ''
     right_sidebar = login_form() 
     return html_all(menu, content, right_sidebar)
 
 
 @app.route("/contacts")
 def contacts():
-    menu = """
-            <div class="menu_box">
-                <a href="index"><div class="Menu">Главная</div></a>
-                <a href="about"><div class="Menu">Обо мне</div></a>
-                <a href="science"><div class="Menu">Наука</div></a>
-                <a href="contacts"><div class="Menu-opened">Контакты</div></a>
-            </div>"""
-    content = """
-        <div class="content">
-            <div class="news">
-                <h1>Контакты</h1><br>
-            </div>
-        </div>"""
-    right_sidebar = login_form()
-    return html_all(menu, content, right_sidebar)
+    return page_not_found_error()
 
 
 @app.route("/science")
-def science():
-    menu = """
-            <div class="menu_box">
-                <a href="index"><div class="Menu">Главная</div></a>
-                <a href="about"><div class="Menu">Обо мне</div></a>
-                <a href="science"><div class="Menu-opened">Наука</div></a>
-                <a href="contacts"><div class="Menu">Контакты</div></a>
-            </div>"""
-    science = open('pages/science.txt', 'r')
-    content = ("""
-        <div class="content">
-            <div class="news">
-                <h1>Наука</h1><br>"""
-                + science.read() +
-            """</div>\
-        </div>""")
-    right_sidebar = login_form()   
-    return html_all(menu, content, right_sidebar)
+def science(): 
+    return page_not_found_error()
 
 
 @app.route("/profile")
@@ -219,13 +177,6 @@ def style():
 def top():
     img = open('resources/img/top.png', 'rb')
     return img.read()
-
-
-@app.route("/img/me_1")
-def me_1():
-    img = open('resources/img/me_1.jpg', 'rb')
-    return img.read()
-
 
 @app.route("/captcha")
 def captcha():

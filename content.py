@@ -47,9 +47,11 @@ def html_all(menu, content, right_sidebar):
                         """</div>
                     </header> <!-- .header-->
                     <div class="middle">
-                        <div class="container">"""
+                        <div class="container">
+                            <div class="content">"""
                          + content +
-                        """</div><!-- .container-->
+                        """</div>
+                        </div><!-- .container-->
                         <div class="right-sidebar">"""
                         + right_sidebar +
                         """</div>
