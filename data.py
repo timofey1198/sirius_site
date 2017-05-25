@@ -1,6 +1,7 @@
 import openpyxl
 from random import choice, randint
 from PIL import Image, ImageDraw, ImageFont
+import sqlite3
 
 def is_access(user, key):
     wb = openpyxl.load_workbook(filename = 'resources/users.xlsx')
@@ -65,5 +66,65 @@ def captcha():
     img.save('resources/img/captcha/%s.jpg' %str(key), 'JPEG')
     return key
 
+def name_parser(name):
+    first_split = list(name.split('_'))
+    num = first_split[0]
+    title = list(first_split[1].split('.'))[0]
+    return (title, num)
+
+ 
+
+
+
+# Создание таблицы
+#cursor.execute("""CREATE TABLE users_access
+                  #(id integer primary key, login text, password text,  
+                   #access_num integer)
+               #""")
+
+
+              #cursor.execute("""INSERT INTO users_access
+                            #VALUES (1, 'timostar', 'Upiter98', 0)"""
+                         #)
+          
+          #
+
+def get_last_nubmer(table):
+    conn = sqlite3.connect("resources/data.db")
+    cursor = conn.cursor()
+    sql = "SELECT MAX([id]) FROM %s"%table
+    cursor.execute(sql)
+    return cursor.fetchall()[0][0]
+
+def new_article(title, body, author):
+    number = get_last_nubmer('news')
+    if number == None:
+        number = 0
+    number += 1
+    conn = sqlite3.connect("resources/data.db")
+    cursor = conn.cursor()
+    filename = str(number)
+    cursor.execute("""INSERT INTO news
+                   VALUES (?, ?, ?, ?)
+                   """, [str(number), title, filename, author])
+    conn.commit()
+    f = open('pages/news/%s.txt'%filename, 'w+')
+    f.write(body)
+    f.close()
+
+def get_articles_info(number):
+    conn = sqlite3.connect("resources/data.db")
+    cursor = conn.cursor()
+    cursor.execute("""SELECT * FROM news WHERE id=?
+                   """, [("%i"%number)])
+    return cursor.fetchall()[0]
+
+def delete_article(number):
+    conn = sqlite3.connect("resources/data.db")
+    cursor = conn.cursor()
+    cursor.execute("DELETE FROM news WHERE id=?", [("%i"%number)])
+    conn.commit()
+
 if __name__ == "__main__":
-    print(is_access('timostar', 0))
+    print(get_last_nubmer('news'))
+    #print(is_access('timostar', 0))

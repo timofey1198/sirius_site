@@ -7,6 +7,7 @@ from flask import url_for
 from flask import escape
 from content import html_all
 import data
+import os
 
 app = Flask(__name__)
 app.secret_key = 'd&hnkj;84H(Ffn97@)#38rf3c7uhf39^&@Tb8'
@@ -83,6 +84,17 @@ def page_not_found_error():
         """
     return html
 
+
+@app.route("/news_handler", methods=['POST', 'GET'])
+def news_handler():
+    if request.method == 'POST':
+        title = request.form['news_title']
+        body = request.form['news_text']
+        author = session['login']
+        data.new_article(title, body, author)
+        return news()
+    return edit()
+
 #------------------------------------PAGES--------------------------------------
 
 @app.route("/")
@@ -141,9 +153,48 @@ def news():
                 <a href="news"><div class="Menu-opened">Новости</div></a>
             </div>
             """
-    content = edit
+    news = ''
+    files = os.listdir(path = 'pages/news')
+    files.sort(key=lambda x: -int(x.split('.')[0]))
+    for name in files:
+        f = open('pages/news/' + name, 'r')
+        text = f.read()
+        f.close()
+        number = int(name.split('.')[0])
+        info = data.get_articles_info(number)
+        title = info[1]
+        author = info[3]
+        article = """
+            <div class="news">
+                <h3>%s</h3>
+                <p>%s</p>
+                <form action="news/article" method="POST">
+                <input type="hidden" name="article" value="%s">
+                <input type="submit" value="Подробнее" style="
+                        background: inherit;
+                        border: 0px;
+                        color: red;
+                        cursor: pointer;
+                        ">
+                </form>
+                <br>
+                <i>Автор: %s</i>
+                <br><br>
+                <hr>
+            </div>
+        """%(title, text, str(number), author)
+        news += article
+    content = edit + news
     right_sidebar = login_form() 
     return html_all(menu, content, right_sidebar)
+
+
+@app.route("/news/article", methods=['POST', 'GET'])
+def article():
+    if request.method == 'POST':
+        return request.form['article']
+    else:
+        return redirect(url_for("news"))
 
 
 @app.route("/contacts")
@@ -156,14 +207,37 @@ def science():
     return page_not_found_error()
 
 
+@app.route("/edit")
+def edit():
+    menu = """
+                <div class="menu_box">
+                    <a href="index"><div class="Menu">Главная</div></a>
+                    <a href="news"><div class="Menu">Новости</div></a>
+                    <a href="profile"><div class="Menu">Профиль</div></a>
+                </div>"""
+    content = """
+        <div class="news">
+            <form action="/news_handler" method="POST">
+                <input type="text" name="news_title" value="Заголовок"><br>
+                <input type="text" name="news_text" value="введите текст новости" 
+                  style="
+                  width: 500px;
+                  height: 400px;
+                  text-align: left;
+                  "><br>
+                <input type="submit" value="Создать">
+            </form>
+        </div>
+    """
+    return html_all(menu, content, '')
+
+
 @app.route("/profile")
 def profile():
     menu = """
             <div class="menu_box">
                 <a href="index"><div class="Menu">Главная</div></a>
-                <a href="about"><div class="Menu">Обо мне</div></a>
-                <a href="science"><div class="Menu">Наука</div></a>
-                <a href="contacts"><div class="Menu">Контакты</div></a>
+                <a href="news"><div class="Menu">Новости</div></a>
                 <a href="profile"><div class="Menu-opened">Профиль</div></a>
             </div>"""    
     if 'login' in session:
