@@ -5,7 +5,7 @@ def head():
     head = """
     <head>
         <meta charset="utf-8">
-        <link href="style" rel="stylesheet">
+        <link href="/style" rel="stylesheet">
     </head>"""
     return head
 
@@ -13,10 +13,10 @@ def head():
 def menu():
     menu = """
         <div class="menu_box">
-            <a href="index"><div class="Menu">Главная</div></a>
-            <a href="about"><div class="Menu">Обо мне</div></a>
-            <a href="science"><div class="Menu">Наука</div></a>
-            <a href="contacts"><div class="Menu">Контакты</div></a>
+            <a href="/index"><div class="Menu">Главная</div></a>
+            <a href="/about"><div class="Menu">Обо мне</div></a>
+            <a href="/science"><div class="Menu">Наука</div></a>
+            <a href="/contacts"><div class="Menu">Контакты</div></a>
         </div>"""
     return menu
 

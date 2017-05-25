@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import openpyxl
 from random import choice, randint
 from PIL import Image, ImageDraw, ImageFont
@@ -76,7 +77,7 @@ def name_parser(name):
 
 
 
-# Создание таблицы
+# РЎРѕР·РґР°РЅРёРµ С‚Р°Р±Р»РёС†С‹
 #cursor.execute("""CREATE TABLE users_access
                   #(id integer primary key, login text, password text,  
                    #access_num integer)
@@ -108,7 +109,7 @@ def new_article(title, body, author):
                    VALUES (?, ?, ?, ?)
                    """, [str(number), title, filename, author])
     conn.commit()
-    f = open('pages/news/%s.txt'%filename, 'w+')
+    f = open('pages/news/%s.txt'%filename, 'w+', encoding='utf-8')
     f.write(body)
     f.close()
 
