@@ -157,7 +157,7 @@ def news():
     files = os.listdir(path = 'pages/news')
     files.sort(key=lambda x: -int(x.split('.')[0]))
     for name in files:
-        f = open('pages/news/' + name, 'r')
+        f = open('pages/news/' + name, 'r', encoding='utf-8')
         text = f.read()
         f.close()
         number = int(name.split('.')[0])
@@ -169,7 +169,7 @@ def news():
                 <h3>%s</h3>
                 <p>%s</p>
                 <form action="news/article" method="POST">
-                <input type="hidden" name="article" value="%s">
+                <input type="hidden" name="article_id" value="%s">
                 <input type="submit" value="Подробнее" style="
                         background: inherit;
                         border: 0px;
@@ -192,7 +192,29 @@ def news():
 @app.route("/news/article", methods=['POST', 'GET'])
 def article():
     if request.method == 'POST':
-        return request.form['article']
+        number = request.form['article_id']
+        info = data.get_articles_info(int(number))
+        title = info[1]
+        author = info[3]
+        path = 'pages/news/%s.txt'%info[2]
+        f = open(path, 'r', encoding='utf-8')
+        text = f.read()
+        html = """
+            <div class="news">
+                <h3>%s</h3>
+                <p>%s</p>
+                <br>
+                <i>Автор: %s</i>
+                <br><br>
+            </div>
+        """%(title, text, author)
+        menu = """
+                <div class="menu_box">
+                    <a href="/index"><div class="Menu">Главная</div></a>
+                    <a href="/news"><div class="Menu">Новости</div></a>
+                </div>
+                    """        
+        return html_all(menu, html, '')
     else:
         return redirect(url_for("news"))
 
