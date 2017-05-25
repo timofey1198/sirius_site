@@ -24,10 +24,8 @@ def menu():
 def footer():
     footer = """
     <footer class="footer">
-        <p>
-            Lastockkina Maria<br>
+            Starodubtsev Timofei<br>
             Copyright &copy; 2017
-        </p>
     </footer> <!-- .footer -->"""
     return footer
 
